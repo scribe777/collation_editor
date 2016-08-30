@@ -8,6 +8,27 @@
 <%@ page import="java.io.InputStreamReader" %>
 <%@ page import="org.apache.log4j.Logger" %>
 <%@ page import="javax.servlet.http.Cookie" %>
+
+<%!
+public static void dumpCallInfo(HttpServletRequest request, Logger logger) {
+logger.info("CallInfo...");
+logger.info("request.getContentType: " + request.getContentType());
+logger.info("Headers: ");
+	for (Object o: java.util.Collections.list(request.getHeaderNames())) {
+logger.info(o + "=" + request.getHeader(o.toString()));
+	}
+logger.info("Attributes: ");
+	for (Object o: java.util.Collections.list(request.getAttributeNames())) {
+logger.info(o + "=" + request.getAttribute(o.toString()));
+	}
+logger.info("Parameters: ");
+	for (Object o: java.util.Collections.list(request.getParameterNames())) {
+		for (String v: request.getParameterValues(o.toString())) {
+logger.info(o + "=" + v);
+		}
+	}
+}
+%>
 <%
 
 Logger logger = Logger.getLogger("collation_editor/vmrcre_collation");
@@ -16,6 +37,9 @@ String requestURI = request.getRequestURI();
 requestURI = requestURI.substring(requestURI.indexOf("/", 2));
 File collate_cli = new File(getServletContext().getRealPath(requestURI));
 collate_cli = new File(collate_cli.getParentFile().getParentFile().getParentFile(), "python/collate_cli.py");
+boolean reEncode = false;
+
+//dumpCallInfo(request, logger);
 
 String options = request.getParameter("options");
 
@@ -29,8 +53,8 @@ if (options != null) {
 	else {
 		response.setContentType("text/plain");
 		response.setHeader("Content-Disposition", "attachment; filename=\"negative-apparatus.xml\"");
-		Cookie c = new Cookie("fileDownload", "true");
-		response.addCookie(c);
+		response.setHeader("Set-Cookie", "fileDownload=true; path=/");
+		reEncode = true;
 	}
 
 	String args[] = new String[] {
@@ -41,10 +65,11 @@ if (options != null) {
 	StringBuffer resultBuf = new StringBuffer();
 	StringBuffer errorBuf = new StringBuffer();
 		
-logger.debug("********************************************************* Input: " + options);
+logger.info("********************************************************* Input: " + options);
 	runCommand(args, resultBuf, errorBuf, options, logger);
+	if (reEncode) resultBuf = new StringBuffer(new String(resultBuf.toString().getBytes("iso8859-1"), "UTF-8"));
 
-logger.debug("********************************************************* Result: " + resultBuf);
+logger.info("********************************************************* Result: " + resultBuf);
 	if (errorBuf.length() > 0) logger.debug("********************************************************* Error: " + errorBuf);
 %>
 <%= resultBuf %>

@@ -185,7 +185,9 @@ class PreProcessor(Regulariser):
             local_python_functions=self.local_python_functions,
             rule_conditions_config=self.rule_conds_config
             )
+        eprint('postprocessing started')
         output = pp.produce_variant_units()
+        eprint('postprocessing finished')
         return output
 
 
@@ -217,6 +219,8 @@ class PreProcessor(Regulariser):
         payload['algorithm'] = algorithm #'needleman-wunsch'#'dekker' #'needleman-wunsch'#'dekker-experimental'#
         payload['tokenComparator'] = tokenComparator #{"type": "levenshtein", "distance": 2}#{'type': 'equality'}
         target = 'http://%s/collate/' % host
+	#eprint('COLLATE DATA:');
+	#eprint(payload);
         json_witnesses = json.dumps(payload)#, default=json_util.default)
         accept_header = self.convert_header_argument(accept)
         headers = {'content-type': 'application/json',

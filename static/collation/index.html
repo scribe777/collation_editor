@@ -28,13 +28,13 @@
   <script type="text/javascript" src="/collation/js/services_magpy.js"></script>
 
 
--->
 	<script type="text/javascript" src="js/services_local.js"></script>
+-->
 
-<!--
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="js/services_vmr.js"></script>
+<!--
 -->
   
 
@@ -46,6 +46,33 @@
   <link rel=stylesheet href="css/structure.css" type="text/css"/>
   <link rel=stylesheet href="css/collation.css" type="text/css"/>
 </head>
+<script>
+function getURLParams() {
+    var vars = [], hash;
+    var hashes = [];
+try {
+	var queryString = null;
+	if (window.location.href.indexOf('?') > -1) {
+		queryString = window.location.href.slice(window.location.href.indexOf('?') + 1);
+	}
+	
+	hashes = queryString.split('&');
+} catch(err) {}
+    for(var i = 0; i < hashes.length; i++) {
+        var offset = hashes[i].indexOf('=');
+        vars[decodeURIComponent(hashes[i].substring(0,offset).replace(/\+/g, ' '))] = decodeURIComponent(hashes[i].substring(offset+1).replace(/\+/g, ' '));
+    }
+    return vars;
+}
+
+	var val = getURLParams()['indexContent'];
+	if (!val) val = getURLParams()['biblicalContent'];
+	if (!val) val = getURLParams()['key'];
+	if (!val) val = getURLParams()['verse'];
+	if (val != null) {
+		vmr_services.initialCollationVerse = val;
+	}
+</script>
 <body onload="CL.initialise_editor()" oncontextmenu="return false;">
 	<div id="header" class="collation_header"><h1 id="stage_id">Collation</h1><h1 id="project_name"></h1><div id="login_status"></div></div>
 	<div id="container">

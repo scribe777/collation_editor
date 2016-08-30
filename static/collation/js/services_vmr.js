@@ -191,6 +191,8 @@ console.log('*** Error: _save_regularization_rule failed.');
 	    }).fail(function () { result_callback(null, 400); });
 	},
 
+	initalCollationVerse : null,
+
 	_load_projects(project_names, result_callback) {
 		var params = {
 			sessionHash : vmr_services._vmr_session,
@@ -437,12 +439,15 @@ console.log('*** failed: _get_available_projects');
 	},
 
 	get_verse_data : function (verse, witness_list, private_witnesses, success_callback) {
-		var url, options;
-		options = {};
-		url = _vmr_api + "transcript/get/";
-		
-		options = {'sessionHash' : vmr_services._vmr_session, 'format': 'wce', 'indexContent': verse, 'docID': witness_list.join('|')};
-		if (typeof transcriptionUser !== 'undefined' && transcriptionUser) options.userName = transcriptionUser;
+		var url = _vmr_api + "transcript/get/";
+		var options = {
+			'sessionHash' : vmr_services._vmr_session,
+			'format': 'wce',
+			'indexContent': verse,
+			'ignoreAccents': true,
+			'docID': witness_list.join('|')
+		};
+		if (typeof transcriptionUser !== 'undefined' && transcriptionUser) options.preferUser = transcriptionUser;
 		if (private_witnesses) options.userName = vmr_services._user._id;
 
 		$.post(url, options, function (result) {
@@ -808,7 +813,7 @@ console.log('*** failed: user/get');
 		}
 	},
 	load_saved_collation: function (id, result_callback) {
-		if (id.split) {
+		if (id && id.split) {
 			var idSegs = id.split('/');
 			var user = null;
 			var rev = null;
@@ -856,11 +861,44 @@ console.log('*** failed: user/get');
 	    });
 	},
 
-	get_apparatus_for_context: function (success_callback) {
+	get_apparatus_for_context: function (result_callback) {
+		var postData = {
+			options : JSON.stringify({
+				settings : JSON.stringify(CL.get_exporter_settings()),
+				format: 'negative_xml',
+				data: JSON.stringify([{
+					"context" : CL._context,
+					"structure": CL._data
+				}])
+			})
+		};
 		var url;
 		url = LOCAL_SERVICES_DOMAIN;
 		if (url.length < 4 || url.substring(0,4) !== 'http') url = 'http://'+LOCAL_SERVICES_DOMAIN;
 		url += '/vmrcre_collation.jsp';
+
+
+
+/*
+		var form = document.createElement("form");
+		form.setAttribute("method", "post");
+		form.setAttribute("action", url);
+		form.setAttribute("target", "apparatusout");
+
+		for (k in postData) {
+			var hiddenField = document.createElement("input");              
+			hiddenField.setAttribute("type", "hidden");
+			hiddenField.setAttribute("name", k);
+			hiddenField.setAttribute("value", postData[k]);
+			form.appendChild(hiddenField);
+		}
+		document.body.appendChild(form);
+
+		window.open('/community/images/blank.png', 'apparatusout', 'scrollbars=yes,menubar=no,height=600,width=800,resizable=yes,toolbar=no,status=no');
+
+		form.submit();
+*/
+
 		$.fileDownload(url, {httpMethod: "POST", 
 			data: { options : JSON.stringify({
 				settings: JSON.stringify(CL.get_exporter_settings()),
@@ -868,19 +906,33 @@ console.log('*** failed: user/get');
 				data: JSON.stringify([{"context": CL._context, "structure": CL._data}])
 			})},
 			successCallback: function () {
-				if (success_callback) {
-					success_callback();
+				if (result_callback) {
+					result_callback();
+				}
+			},
+			failCallback: function (html, url) {
+				alert(html);
+				if (result_callback) {
+					result_callback();
 				}
 			}
 			//can also add a failCallback here if you want
 		});
+		if (result_callback) {
+			result_callback();
+		}
 	},
 
 	_project : null,
 
+	initialCollationVerse : null,
+
 	_context_input_form_onload: function() {
 		VMRCRE.context_input_form_onload(function() {
 			$('#bookselect').val(vmr_services._project.book);
+			if (vmr_services.initialCollationVerse) {
+				try { $('#bookselect').val(vmr_services.initialCollationVerse.split('.')[0]); } catch(err) {}
+			}
 			$('#bookselect').trigger('change');
 		});
 	},

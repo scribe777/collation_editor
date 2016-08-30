@@ -21,6 +21,11 @@ var VMRCRE = (function () {
 		    for (var i = 1; i <= parseInt(max); ++i) {
 			$("#verseselect").append("<option value='"+i+"'>"+i+"</option>");
 		    }
+console.log('chapter select: ' + vmr_services.initialCollationVerse);
+		    if (vmr_services.initialCollationVerse) {
+			try { $('#verseselect').val(vmr_services.initialCollationVerse.split('.')[2]); } catch(err) {}
+			$('#collate').trigger('click');
+		    }
 		});
 	    }
 	},
@@ -40,6 +45,11 @@ var VMRCRE = (function () {
 					$("#chapterselect").append("<option value='"+i+"'>"+i+"</option>");
 				}
 				$("#chapterselect").focus();
+console.log('book select: ' + vmr_services.initialCollationVerse);
+				if (vmr_services.initialCollationVerse) {
+					try {$('#chapterselect').val(vmr_services.initialCollationVerse.split('.')[1]); } catch(err) {}
+					$('#chapterselect').trigger('change');
+				}
 			});
 		}
 		VMRCRE.chapterSelectChanged();

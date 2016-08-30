@@ -63,7 +63,7 @@ def collation(params):
         
     p = PreProcessor(display_settings_config, local_python_functions, rule_conditions_config)
     output = p.process_witness_list(data_input, requested_witnesses, rules, basetext_transcription, project, display_settings, collate_settings, accept)
-    eprint(output)
+    #eprint(output)
 #    response.content_type = 'application/json'
     return json.dumps(output)#, default=json_util.default)
     
@@ -78,7 +78,7 @@ def apparatus(params):
     else:
         file_ext = 'txt'
     exporter_settings = json.loads(params['settings'])
-    eprint(exporter_settings)
+    #eprint(exporter_settings)
     exf = ExporterFactory(exporter_settings)
     app = exf.export_data(data, format)
     return app
@@ -87,8 +87,12 @@ def apparatus(params):
 args = sys.argv
 data = sys.stdin.read()
 params = json.loads(data)
-eprint(params)
+#eprint(params)
 if 'data_input' in params:
+    eprint('python collation started')
     print(collation(params))
+    eprint('python collation finished')
 else:
+    eprint('python app export started')
     print(apparatus(params))
+    eprint('python app export finished')

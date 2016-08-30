@@ -67,7 +67,9 @@
 	<script type="text/javascript" src="js/md5.js"></script>
 	<script type="text/javascript" src="js/spin-min.js"></script>
 	<script type="text/javascript" src="js/spinner_controller.js"></script>
+<!--
 	<script type="text/javascript" src="js/fileDownload.js"></script>
+-->
 
 	<script type="text/javascript" src="js/services_vmr.js"></script>
 
@@ -119,12 +121,43 @@ VMR.init(function() {
 		(SITE_DOMAIN.length < 4 || SITE_DOMAIN.substring(0,4) !== 'http' ? 'http://' : '') + SITE_DOMAIN + '/collation/js/menus.js',
 		(SITE_DOMAIN.length < 4 || SITE_DOMAIN.substring(0,4) !== 'http' ? 'http://' : '') + SITE_DOMAIN + '/collation/js/magpy_functions.js'
 	];
+	vmr_services.isAdmin = VMR.isAdmin;
+
+	var val = VMR.getURLParams()['indexContent'];
+	if (!val) val = VMR.getURLParams()['biblicalContent'];
+	if (!val) val = VMR.getURLParams()['key'];
+	if (!val) val = VMR.getURLParams()['verse'];
+	if (val != null) {
+		vmr_services.initialCollationVerse = val;
+	}
 
 	CL.initialise_editor();
 
 }, '../../../../', true);
 
 </script>
+
+<div id="preparing-file-modal" title="Preparing report..." style="display: none;">
+	We are preparing your report, please wait...
+
+	<!--Throw what you'd like for a progress indicator below-->
+	<div class="ui-progressbar-value ui-corner-left ui-corner-right" style="width: 100%; height:22px; margin-top: 20px;"></div>
+</div>
+
+<div id="error-modal" title="Error" style="display: none;">
+	There was a problem generating your report, please try again.
+</div>
+
+<div id="preparing-file-modal" title="Preparing report..." style="display: none;">
+	We are preparing your report, please wait...
+ 
+	<!--Throw what you'd like for a progress indicator below-->
+	<div class="ui-progressbar-value ui-corner-left ui-corner-right" style="width: 100%; height:22px; margin-top: 20px;"></div>
+</div>
+ 
+<div id="error-modal" title="Error" style="display: none;">
+	There was a problem generating your report, please try again.
+</div>
 
 </body>
 </html>
