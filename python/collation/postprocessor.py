@@ -368,9 +368,11 @@ class PostProcessor(Regulariser):
         previous_index = 0
         for i, unit in enumerate(variant_units):
             base_reading = unit[0]['text']
-            if not len(base_reading) or (\
-                    (self.lac_readings != None and self.overtext_name in self.lac_readings) \
-                    or (self.om_readings != None and self.overtext_name in self.om_readings)):
+            if not len(base_reading) \
+                    or ((self.lac_readings != None and self.overtext_name in self.lac_readings) \
+                    or (self.om_readings != None and self.overtext_name in self.om_readings) \
+                    or (self.overtext_name not in base_reading[0]) \
+                    ):
                 #we are looking at an addition so odd numbers
                 start_index = previous_index + 1
                 end_index = previous_index + 1
@@ -382,6 +384,7 @@ class PostProcessor(Regulariser):
                 #this is an even numbered unit so reset subindex
                 sub_index = 1
                 # we have a base text so just get the start and end from base text indexes!
+                eprint(base_reading[0]);
                 start_index = int(base_reading[0][self.overtext_name]['index'])
                 end_index = int(base_reading[-1][self.overtext_name]['index'])
                 previous_index = end_index

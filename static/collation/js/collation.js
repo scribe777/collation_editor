@@ -896,7 +896,7 @@ var CL = (function () {
 							}
 							return [false];
 						}
-						if (reading.text[reading.text.length - 1][witness].hasOwnProperty('gap_after')) {
+						if (reading.text[reading.text.length - 1][witness] && reading.text[reading.text.length - 1][witness].hasOwnProperty('gap_after')) {
 							return [true, reading.text[reading.text.length - 1][witness].gap_details];
 						}
 						return [false];

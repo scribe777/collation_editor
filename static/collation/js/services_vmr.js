@@ -544,46 +544,50 @@ console.log('*** Error: _delete_regularization_rule_exception failed.');
 				return result_callback(rules);
 			}
 			$(data).find('regularization').each(function() {
-				var rule = {
-					_id : $(this).attr('regID'),
-					_model: 'decision',
-					_meta : {
-						_last_modified_time : new Date().getTime(),
-						_last_modified_by : $(this).attr('userID'),
-						_last_modified_by_display : $(this).attr('userID')
-					},
-					active : true,
-					type : 'regularisation',
-					project : $(this).attr('group'),
-					t : $(this).find('sourceWord').text(),
-					n : $(this).find('targetWord').text(),
-					'class' : $(this).attr('type').toLowerCase(),
+				// parallel segmentation rules from bubble regularizer don't play nice
+				// with apparatus editor
+				if ($(this).attr('type') != 'Parallel Segmentation') {
+					var rule = {
+						_id : $(this).attr('regID'),
+						_model: 'decision',
+						_meta : {
+							_last_modified_time : new Date().getTime(),
+							_last_modified_by : $(this).attr('userID'),
+							_last_modified_by_display : $(this).attr('userID')
+						},
+						active : true,
+						type : 'regularisation',
+						project : $(this).attr('group'),
+						t : $(this).find('sourceWord').text(),
+						n : $(this).find('targetWord').text(),
+						'class' : $(this).attr('type').toLowerCase(),
+					}
+					if ($(this).attr('scope') == 'Global') {
+						rule.scope = 'always';
+						rule.context = {};
+					}
+					else {
+						rule.scope = 'verse';
+						rule.context = { unit : $(this).attr('contextVerse') };
+					}
+					if ($(this).find('comment').length) {
+						rule.comments = $(this).find('comment').text();
+					}
+					if ($(this).attr('optionsCodes')) {
+						rule.conditions = {};
+						var codes = $(this).attr('optionsCodes').split('|');
+						if (codes.indexOf('IGNORE_SUPPLIED') > -1) rule.conditions.ignore_supplied = true;
+						if (codes.indexOf('IGNORE_UNCLEAR') > -1) rule.conditions.ignore_unclear = true;
+						if (codes.indexOf('ONLY_NOMSAC') > -1) rule.conditions.only_nomsac = true;
+					}
+					if ($(this).find('verseException').length) {
+						rule.exceptions = [];
+						$(this).find('verseException').each(function() {
+							rule.exceptions.push($(this).attr('verse'));
+						});
+					}
+					rules.push(rule);
 				}
-				if ($(this).attr('scope') == 'Global') {
-					rule.scope = 'always';
-					rule.context = {};
-				}
-				else {
-					rule.scope = 'verse';
-					rule.context = { unit : $(this).attr('contextVerse') };
-				}
-				if ($(this).find('comment').length) {
-					rule.comments = $(this).find('comment').text();
-				}
-				if ($(this).attr('optionsCodes')) {
-					rule.conditions = {};
-					var codes = $(this).attr('optionsCodes').split('|');
-					if (codes.indexOf('IGNORE_SUPPLIED') > -1) rule.conditions.ignore_supplied = true;
-					if (codes.indexOf('IGNORE_UNCLEAR') > -1) rule.conditions.ignore_unclear = true;
-					if (codes.indexOf('ONLY_NOMSAC') > -1) rule.conditions.only_nomsac = true;
-				}
-				if ($(this).find('verseException').length) {
-					rule.exceptions = [];
-					$(this).find('verseException').each(function() {
-						rule.exceptions.push($(this).attr('verse'));
-					});
-				}
-				rules.push(rule);
 			});
 			return vmr_services.get_rules_by_ids(ids, result_callback, rules, ++i);
 		}).fail(function(o) {
