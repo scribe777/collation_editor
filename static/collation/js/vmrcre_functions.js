@@ -2,7 +2,7 @@ var VMRCRE = (function () {
 
     return {
 
-	servicesURL : (typeof VMR !== 'undefined') ? VMR.servicesURL : 'http://ntvmr.uni-muenster.de/community/vmr/api',
+	servicesURL : (typeof VMR !== 'undefined') ? VMR.httpRoot + 'vmr/api/' : 'http://ntvmr.uni-muenster.de/community/vmr/api',
 
 
 	chapterSelectChanged : function() {

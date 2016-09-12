@@ -113,9 +113,9 @@ VMR.init(function() {
 	baseTextDocID = parseInt(VMR.prefs.getString('baseTextDocID'));
 	if (isNaN(baseTextDocID)) baseTextDocID = null;
 
-	vmr_services.set_vmr_services(VMR.servicesURL);
-	SITE_DOMAIN = VMR.gadgetsRoot + 'modules/apparatus/edit/static';
-	LOCAL_SERVICES_DOMAIN = VMR.gadgetsRoot + 'modules/apparatus/edit/static/collation';
+	SITE_DOMAIN = VMR.httpRoot + 'modules/apparatus/edit/static';
+	LOCAL_SERVICES_DOMAIN = VMR.httpRoot + 'modules/apparatus/edit/static/collation';
+	vmr_services.set_vmr_services(VMR.httpRoot+'vmr/api/');
 
 	vmr_services.local_javascript = [
 		(SITE_DOMAIN.length < 4 || SITE_DOMAIN.substring(0,4) !== 'http' ? 'http://' : '') + SITE_DOMAIN + '/collation/js/menus.js',
