@@ -151,6 +151,11 @@ console.log('*** Error: _delete_regularization_rule failed.');
 			params.scope = 'Verse';
 			params.verse = rule.context.unit;
 		}
+		else if (rule.scope == 'once') {
+			params.scope = 'Once';
+			params.verse = rule.context.unit;
+			params.contextPre = rule.context.witness + '|' + rule.context.word;
+		}
 		else {
 			params.scope = 'Global';
 		}
@@ -269,12 +274,10 @@ console.log('*** failed: _get_available_projects');
 		});
 	},
 
-	supported_rule_scopes: {
-//		'once'      : 'This place, these MSS', 
-		'verse'     : 'This verse, all MSS', 
-//		'manuscript': 'Everywhere, these MSS', 
-		'always'    : 'Everywhere, all MSS'
-	},
+	supported_rule_scopes: {'once': 'This place, these MSS', 
+	    			'verse': 'This verse, all MSS', 
+//	    			'manuscript': 'Everywhere, these MSS', 
+	    			'always': 'Everywhere, all MSS'},
 
 //	get_login_url : function () { return 'http://ntvmr.uni-muenster.de/community/vmr/api/auth/session/open/form?redirURL=http://'+SITE_DOMAIN + '/collation/'; },
 	get_login_url : function () { return (typeof VMR !== 'undefined') ? VMR.httpRoot : 'http://ntvmr.uni-muenster.de'; },
@@ -565,6 +568,15 @@ console.log('*** Error: _delete_regularization_rule_exception failed.');
 					if ($(this).attr('scope') == 'Global') {
 						rule.scope = 'always';
 						rule.context = {};
+					}
+					else if ($(this).attr('scope') == 'Once') {
+						rule.scope = 'once';
+						var context = $(this).attr('contextPre').split('|');
+						rule.context = {
+							unit    : $(this).attr('contextVerse'),
+							witness : context[0],
+							word    : context[1]
+						};
 					}
 					else {
 						rule.scope = 'verse';

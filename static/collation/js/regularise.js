@@ -785,7 +785,9 @@ var RG = (function () {
                         }
                         
                 };
-                $.get('http://' + SITE_DOMAIN + '/collation/htmlfragments/rule_menu.html', function (html) {
+		var url = SITE_DOMAIN;
+		if (url.length < 4 || url.substring(0,4) !== 'http') url = 'http://'+SITE_DOMAIN;
+                $.get(url + '/collation/htmlfragments/rule_menu.html', function (html) {
                     reg_menu = document.createElement('div');
                     reg_menu.setAttribute('id', 'reg_form');
                     reg_menu.setAttribute('class', 'reg_form');
