@@ -3077,7 +3077,15 @@ var CL = (function () {
 			if (CL._project.hasOwnProperty('name')) {
 				html += CL._project.name;
 			}
-			html += '</h1><div id="message_panel"></div><div id="login_status"></div>';
+			var logoRootURL = SITE_DOMAIN;
+			if (logoRootURL.length < 4 || logoRootURL.substring(0,4) !== 'http') logoRootURL = 'http://'+SITE_DOMAIN;
+			html += '</h1><div id="message_panel"></div>';
+			html += '<div id="credits" style="float:right;margin-left:2em;margin-right:-6px;">';
+			html += '<div style="text-align:right;float:left;margin-right:0.5em;margin-top:5px;color:#f2f2f2;"><span style="font-weight:bold;">THE WORKSPACE FOR COLLABORATIVE EDITING</span><br/>Collation and Apparatus Editor by</div>';
+			html += '<img style="z-index:2;position:absolute;height:34px;margin-top:13px;margin-left:4px;"src="'+logoRootURL+'/bham-logo.svg"/>';
+			html += '<img style="height:55px;margin-top:-8px;border-radius:0.3em" src="'+logoRootURL+'/itsee-logo.png"/>';
+			html += '</div>';
+			html += '<div id="login_status"></div>';
 			return html;
 		},
 
