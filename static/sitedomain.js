@@ -1,2 +1,2 @@
-SITE_DOMAIN = 'http://ntvmr.uni-muenster.de/community/modules/collation_editor/static';
-LOCAL_SERVICES_DOMAIN = 'http://ntvmr.uni-muenster.de/community/modules/collation_editor/static/collation';
+SITE_DOMAIN = 'http://localhost:8080/community/modules/apparatus/edit/static';
+LOCAL_SERVICES_DOMAIN = 'http://localhost:8080/community/modules/apparatus/edit/static/collation';
