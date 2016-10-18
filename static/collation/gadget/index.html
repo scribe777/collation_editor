@@ -26,6 +26,7 @@
 	<EnumValue value="2" display_value="Published"/>
 	<EnumValue value="3" display_value="Current User"/>
 </UserPref>
+<UserPref name="splitPunct" datatype="bool" display_name="Treat Punctuation as Separate Token" default_value="false"/>
 <UserPref name="height" datatype="enum" display_name="Gadget Height" default_value="400">
 	<EnumValue value="200" display_value="Short"/>
 	<EnumValue value="400" display_value="Medium"/>
@@ -81,6 +82,7 @@
 
 var baseTextDocID = null;
 var transcriptionUser = null;
+var splitPunct = null;
 
 </script>
 
@@ -117,6 +119,7 @@ VMR.init(function() {
 	var transType = VMR.prefs.getString('transType');
 	if (transType == 1) transcriptionUser = VMR.siteName;
 	else if (transType == 3) transcriptionUser = VMR.userName;
+	splitPunct = VMR.prefs.getBool('splitPunct');
 
 	baseTextDocID = parseInt(VMR.prefs.getString('baseTextDocID'));
 	if (isNaN(baseTextDocID)) baseTextDocID = null;
