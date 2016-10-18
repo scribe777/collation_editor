@@ -953,23 +953,26 @@ console.log('*** failed: user/get');
 		});
 	},
 
+	witness_sort : function (witnesses) {
+		return witnesses.sort(LOCAL.compare_witness_types);
+	},
 	_project_default : {
-			_id: '',
-			project: '',
-			V_for_supplied: true,
-			collation_source: 'WCE',
-			book_name: 'Matthew',
-			language: 'grc',
-			book:'mt',
-			base_text:'1002800',
-			local_js_file : ['/collation/js/vmrcre_functions.js'],
-			context_input : {
-				'form': 'vmrcre_verse_selector.html', 
-				'onload_function': 'vmr_services._context_input_form_onload', 
-				'result_provider': 'VMRCRE.get_context_from_input_form'
-			},
-			managing_editor:'tagriffitts',
-			editors:['tagriffitts', 'cat', "4fec7b934a64b14976000001","4ff15e524a64b14976000006"],
+		_id: '',
+		project: '',
+		V_for_supplied: true,
+		collation_source: 'WCE',
+		book_name: 'Matthew',
+		language: 'grc',
+		book:'mt',
+		base_text:'1002800',
+		local_js_file : ['/collation/js/vmrcre_functions.js'],
+		context_input : {
+			'form': 'vmrcre_verse_selector.html', 
+			'onload_function': 'vmr_services._context_input_form_onload', 
+			'result_provider': 'VMRCRE.get_context_from_input_form'
+		},
+		managing_editor:'tagriffitts',
+		editors:['tagriffitts', 'cat', "4fec7b934a64b14976000001","4ff15e524a64b14976000006"],
 
 
 	"local_python_implementations": {
@@ -983,9 +986,6 @@ console.log('*** failed: user/get');
 			"class_name": "PrepareData",
 			"function": "set_rule_string"
 		}
-	},
-	witness_sort : function (witnesses) {
-		return witnesses.sort(LOCAL.compare_witness_types);
 	},
 	pre_stage_checks: {
 	    "order_readings": [
@@ -1021,42 +1021,7 @@ console.log('*** failed: user/get');
 	    "reading_flag": "deleted",
 	    "reading_label": "zu", 
 	}],
-    rule_conditions : {
-        "python_file": "collation.greek_implementations",
-        "class_name": "RuleConditions",
-        "configs" : [
-            {
-                "id": "ignore_supplied",
-                "label": "Ignore supplied markers",
-                "linked_to_settings": true,
-                "setting_id": "view_supplied",
-                "function": "ignore_supplied",
-                "apply_when": true,
-                "check_by_default": false,
-                "type": "string_application"
-            },
-            {
-                "id": "ignore_unclear",
-                "label": "Ignore unclear markers",
-                "linked_to_settings": true,
-                "setting_id": "view_unclear",
-                "function": "ignore_unclear",
-                "apply_when": true,
-                "check_by_default": false,
-                "type": "string_application"
-            },
-            {
-                "id": "only_nomsac",
-                "label": "Only apply to Nomina Sacra",
-                "linked_to_settings": false,
-                "function": "match_nomsac",
-                "apply_when": true,
-                "check_by_default": false,
-                "type": "boolean"
-            }
-        ] 
-    },
-	display_settings : {
+	display_settings_config : {
             "python_file": "collation.greek_implementations",
             "class_name": "ApplySettings",
             "configs": [
@@ -1133,6 +1098,41 @@ console.log('*** failed: user/get');
                 }
             ]
         },
+    rule_conditions : {
+        "python_file": "collation.greek_implementations",
+        "class_name": "RuleConditions",
+        "configs" : [
+            {
+                "id": "ignore_supplied",
+                "label": "Ignore supplied markers",
+                "linked_to_settings": true,
+                "setting_id": "view_supplied",
+                "function": "ignore_supplied",
+                "apply_when": true,
+                "check_by_default": false,
+                "type": "string_application"
+            },
+            {
+                "id": "ignore_unclear",
+                "label": "Ignore unclear markers",
+                "linked_to_settings": true,
+                "setting_id": "view_unclear",
+                "function": "ignore_unclear",
+                "apply_when": true,
+                "check_by_default": false,
+                "type": "string_application"
+            },
+            {
+                "id": "only_nomsac",
+                "label": "Only apply to Nomina Sacra",
+                "linked_to_settings": false,
+                "function": "match_nomsac",
+                "apply_when": true,
+                "check_by_default": false,
+                "type": "boolean"
+            }
+        ] 
+    },
 	"exporter_settings": {
 //		"python_file": "collation.ecm_exporter",
 //		"python_file": "collation.nt_exporter",
